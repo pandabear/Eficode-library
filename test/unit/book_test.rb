@@ -1,0 +1,46 @@
+require 'test_helper'
+
+class BookTest < ActiveSupport::TestCase
+
+  setup do
+    
+  end
+
+  test "a book with all attributes should be valid" do
+    book = books(:steppenwolf)
+    assert book.valid?
+  end
+  
+  test "A book without a title should not be valid" do
+    book = books(:steppenwolf)
+    book.title = ""
+    assert book.invalid?
+  end
+  
+  test "A book without an author should not be valid" do
+    book = books(:steppenwolf)
+    book.authors = ""
+    assert book.invalid?
+  end
+  
+  test "Two books can't share the same title" do
+    book = books(:steppenwolf).dup
+    assert book.invalid?
+  end
+  
+  test "The library has more than 1000 books" do
+    assert Book.count > 1000
+  end
+  
+  test "Empty string for ISBN is invalid for book" do
+    book = books(:steppenwolf)
+    book.isbn = "";
+    assert book.invalid?
+  end
+  
+  test "Random string for an invalid ISBN is invalid for book" do
+    book = books(:steppenwolf)
+    book.isbn = "ogdihjdfiughfdishfgbduvh 56 ouidxfhrt b6t80gj";
+    assert book.invalid?
+  end
+end

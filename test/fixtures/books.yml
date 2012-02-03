@@ -1,0 +1,14 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+steppenwolf:
+  title: Steppenwolf
+  authors: Hermann Hesse
+  description: A great book
+  isbn: 951-98548-9-4
+
+<% for i in 1..1000 %>
+book_<%= i %>:
+  title: Title <%= i %>
+  authors: Author <%= i %>
+  description: <%= i %>. Book
+<% end %>
