@@ -1,0 +1,9 @@
+<h1><%= @book.title %></h1>
+<h2><%= @book.authors %></h2>
+<h3><%= @book.isbn %></h3>
+<p>
+  <%= @book.description %>
+</p>
+<%= link_to "Back to listing page", books_path %> 
+<%= link_to "Edit this book's detail", edit_book_path %>
+<%= link_to "Delete this book", book_path(@book), method: :delete %>

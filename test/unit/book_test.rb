@@ -28,10 +28,6 @@ class BookTest < ActiveSupport::TestCase
     assert book.invalid?
   end
   
-  test "The library has more than 1000 books" do
-    assert Book.count > 1000
-  end
-  
   test "Empty string for ISBN is invalid for book" do
     book = books(:steppenwolf)
     book.isbn = "";

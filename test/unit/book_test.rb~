@@ -2,6 +2,10 @@ require 'test_helper'
 
 class BookTest < ActiveSupport::TestCase
 
+  setup do
+    
+  end
+
   test "a book with all attributes should be valid" do
     book = books(:steppenwolf)
     assert book.valid?
