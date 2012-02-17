@@ -64,7 +64,7 @@ class BooksControllerTest < ActionController::TestCase
   
   test "deleting a book" do
     book = books(:steppenwolf)
-    assert_difference("Books.count", -1) do
+    assert_difference("Book.count", -1) do
       delete :destroy, id: book.id
       assert_response :redirect
       assert_redirected_to books_path
