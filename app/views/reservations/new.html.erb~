@@ -1,0 +1,2 @@
+<h1>Reserving book <strong><%= @reservation.book.title %></strong></h1>
+<%= render partial "form" %>

@@ -4,6 +4,19 @@
 <p>
   <%= @book.description %>
 </p>
+<% if @book_reservation %>
+  <span class="label important">Reserved by <%= @book_reservation.email %></span>
+<% else %>
+  <span class="label success">Free</span>
+<% end %>
+<br />
 <%= link_to "Back to listing page", books_path %> 
 <%= link_to "Edit this book's detail", edit_book_path %>
 <%= link_to "Delete this book", book_path(@book), method: :delete %>
+<br />
+
+<% if @book_reservation %>
+  <%= link_to "Free a book", free_book_reservation_path(@book, @book_reservation), method: :put %>
+<% else %>
+  <%= link_to "Reserve a book", new_book_reservation_path(@book) %>
+<% end %>
