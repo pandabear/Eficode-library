@@ -42,6 +42,16 @@ class BooksController < ApplicationController
     redirect_to books_path
   end
   
+  def search
+    search_query = params[:query]
+    @books = case params[:by]
+    when "isbn" then Book.search_by_isbn(search_query)
+    when "authors" then Book.search_by_authors(search_query)
+    else Book.search_by_title(search_query)
+    end
+    
+    render action: :index
+  end
   
   private
   

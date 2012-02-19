@@ -1,6 +1,10 @@
 Library::Application.routes.draw do
 
   resources :books do
+    collection do
+      get :search
+    end
+       
     resources :reservations, only: [:create, :new] do
       member do
         put :free
@@ -8,5 +12,5 @@ Library::Application.routes.draw do
     end
   end
   
-  root :to => 'site#index'
+  root :to => 'books#index'
 end

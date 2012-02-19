@@ -76,4 +76,26 @@ class BooksControllerTest < ActionController::TestCase
     end
   end
 
+  test "Searching book by title" do
+    get :search, query: "Rails Recipes"
+    assert_response :success
+    assert_template :index
+    assert assigns(:books).include?(books(:rails_recipes))
+  end
+  
+  test "Searching book by ISBN" do
+    book = books(:rails_recipes)
+    get :search, query: book.isbn, by: "isbn"
+    assert_response :success
+    assert_template :index
+    assert assigns(:books).include?(book)
+  end
+  
+  test "Searching by authors" do
+    book = books(:steppenwolf)
+    get :search, query: book.authors, by: "authors"
+    assert_response :success
+    assert_template :index
+    assert assigns(:books).include?(book)
+  end
 end
