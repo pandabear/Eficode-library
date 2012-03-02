@@ -4,6 +4,11 @@ class BooksController < ApplicationController
 
   def index
     @books = Book.all
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @books.to_xml }
+      format.json { render json: @books.to_json }
+    end
   end
   
   def show

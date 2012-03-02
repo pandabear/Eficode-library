@@ -1,7 +1,7 @@
-<%= form_for [@reservation.book, @reservation] do |f| %>
+<%= form_for [@reservation.book, @reservation], remote: true do |f| %>
 
   <% unless @reservation.errors.empty? %>
-    <h2>Failed to reservation.</h2>
+    <h2>Failed to save reservation.</h2>
     <% @reservation.errors.full_messages.each do |msg| %>
       <p><%= msg %></p>
     <% end %>

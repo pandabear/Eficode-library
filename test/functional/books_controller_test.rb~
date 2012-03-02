@@ -1,68 +1,72 @@
 require 'test_helper'
 
 class BooksControllerTest < ActionController::TestCase
-  test "books listing" do
+  
+  test "book listing" do
     get :index
     assert_response :success
     assert assigns(:books)
   end
   
-  test "show desired book" do
-    existing_book = books(:steppenwolf)
-    get :show, id: existing_book.id
+  test "show book" do
+    get :show, id: books(:steppenwolf).id
+
     assert_response :success
     assert assigns(:book)
-    assert_equal assigns(:book), existing_book
+    assert_equal assigns(:book), books(:steppenwolf)
   end
   
-  test "attempting to add new book" do
+  test "new book" do
     get :new
     assert_response :success
     assert assigns(:book)
     assert assigns(:book).new_record?
   end
   
-  test "creating book with valid parameters" do
-    post :create, book: {title: "My title~", 
-                        authors: "The Me", 
-                        isbn: "978-1-93435-690-6"}
+  test "create book with valid parameters" do
+    post :create, book: {title: 'Programming Your Home', authors: 'Mike Riley', isbn: '978-1-93435-690-6'}
     assert_response :redirect
     assert_redirected_to books_path
     assert flash[:notice]
   end
-  
-  test "creating book with NOT valid parameters" do
-    post :create, book: {title: "My fail title~"}
+
+  test "create book with invalid parameters" do
+    post :create, book: {title: 'No such book'}
     assert_response :success
     assert assigns(:book)
     assert assigns(:book).new_record?
     assert_template :new
   end
   
-  test "attempting to edit an existing book" do
+  test "edit book" do
     get :edit, id: books(:steppenwolf).id
+
     assert_response :success
     assert assigns(:book)
-    assert !assigns(:book).new_record?
-  end
-  
-  test "updating an existing book with a valid data" do
-    put :update, id: books(:steppenwolf).id, book: {title: "New successful title"}
-    assert_response :redirect
-    assert_redirected_to book_path
-    assert flash[:notice]
+    assert_equal assigns(:book), books(:steppenwolf)
   end
 
-  test "updating an existing book with NOT valid data" do
-    put :update, id: books(:steppenwolf).id, book: {isbn: "My fail ISBN"}
+  test "update book with valid parameters" do
+    put :update, id: books(:steppenwolf).id,
+                 book: {title: 'Programming Your Home',
+                        authors: 'Mike Riley',
+                        isbn: '978-1-93435-690-6'}
+                     
+    assert_response :redirect
+    assert_redirected_to book_path(books(:steppenwolf))
+    assert flash[:notice]
+  end
+  
+  test "update book with invalid parameters" do
+    put :update, id: books(:steppenwolf).id,
+                 book: {title: 'Some garbage', isbn: 'invalid'}
     assert_response :success
     assert assigns(:book)
     assert assigns(:book).changed?
-    assert flash[:notice]
     assert_template :edit
-  end  
+  end
   
-  test "deleting a book" do
+  test "delete book" do
     book = books(:steppenwolf)
     assert_difference("Book.count", -1) do
       delete :destroy, id: book.id
@@ -71,5 +75,27 @@ class BooksControllerTest < ActionController::TestCase
       assert flash[:notice]
     end
   end
+
+  test "Searching book by title" do
+    get :search, query: "Rails Recipes"
+    assert_response :success
+    assert_template :index
+    assert assigns(:books).include?(books(:rails_recipes))
+  end
   
+  test "Searching book by ISBN" do
+    book = books(:rails_recipes)
+    get :search, query: book.isbn, by: "isbn"
+    assert_response :success
+    assert_template :index
+    assert assigns(:books).include?(book)
+  end
+  
+  test "Searching by authors" do
+    book = books(:steppenwolf)
+    get :search, query: book.authors, by: "authors"
+    assert_response :success
+    assert_template :index
+    assert assigns(:books).include?(book)
+  end
 end

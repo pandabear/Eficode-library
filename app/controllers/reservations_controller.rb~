@@ -1,15 +1,24 @@
 class ReservationsController < ApplicationController
-  before_filter :find_book, only: [:new, :create]
+  before_filter :find_book, only: [:new, :create, :free]
 
   def new
     @reservation = @book.reservations.new
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
   
   def create
     @reservation = @book.reservations.new(params[:reservation])
     if @reservation.save
-      flash[:notice] = "Reservation success!"
-      redirect_to book_path(@book)
+      respond_to do |format|
+      format.html do
+          flash[:notice] = "Reservation success!"
+          redirect_to book_path(@book)
+        end
+      format.js { render: "create" }
+      end
     else
       flash[:notice] = "Book has already been reserved!"
       render action: :new

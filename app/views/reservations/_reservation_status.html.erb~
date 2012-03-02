@@ -1,0 +1,5 @@
+<% if @book_reservation %>
+  <span class="label important">Reserved by <%= @book_reservation.email %></span>
+<% else %>
+  <span class="label success">Free</span>
+<% end %>
